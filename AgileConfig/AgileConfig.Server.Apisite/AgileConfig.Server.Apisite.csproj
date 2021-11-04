@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="agile_config.db" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Agile.Config.Protocol\Agile.Config.Protocol.csproj" />
+    <ProjectReference Include="..\AgileConfig.Server.Data.Entity\AgileConfig.Server.Data.Entity.csproj" />
+    <ProjectReference Include="..\AgileConfig.Server.Data.Freesql\AgileConfig.Server.Data.Freesql.csproj" />
+    <ProjectReference Include="..\AgileConfig.Server.Service\AgileConfig.Server.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="logs\" />
+    <Folder Include="Views\Shared" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\ui\CNAME" />
+    <None Include="wwwroot\ui\layouts__BasicLayout.0a3dbfe2.async.js" />
+    <None Include="wwwroot\ui\layouts__BlankLayout.a243421a.async.js" />
+    <None Include="wwwroot\ui\layouts__SecurityLayout.d36982cd.async.js" />
+    <None Include="wwwroot\ui\layouts__UserLayout.19ae6259.async.js" />
+    <None Include="wwwroot\ui\pro_icon.svg" />
+    <None Include="wwwroot\ui\p__404.958da9ed.async.js" />
+    <None Include="wwwroot\ui\p__Apps.ad813741.async.js" />
+    <None Include="wwwroot\ui\p__Clients.c668d389.async.js" />
+    <None Include="wwwroot\ui\p__Configs.ea5f3a33.async.js" />
+    <None Include="wwwroot\ui\p__Home.7c8c164d.async.js" />
+    <None Include="wwwroot\ui\p__Logs.6dc18603.async.js" />
+    <None Include="wwwroot\ui\p__Nodes.fb870010.async.js" />
+    <None Include="wwwroot\ui\p__User.05484da1.async.js" />
+    <None Include="wwwroot\ui\p__User__initPassword.0c98c56a.async.js" />
+    <None Include="wwwroot\ui\p__User__login.c199bb86.async.js" />
+    <None Include="wwwroot\ui\static\logo.667c5c9b.svg" />
+    <None Include="wwwroot\ui\umi.af52f3db.js" />
+    <None Include="wwwroot\ui\vendors~layouts__BasicLayout~layouts__UserLayout.68e81ef6.async.js" />
+    <None Include="wwwroot\ui\vendors~layouts__BasicLayout~p__Apps~p__Clients~p__Configs~p__Home~p__Logs~p__Nodes~p__User.52661521.async.js" />
+    <None Include="wwwroot\ui\vendors~layouts__BasicLayout~p__Apps~p__Clients~p__Configs~p__Home~p__Logs~p__Nodes~p__User~p__User_~abb5d1ee.3323ef18.async.js" />
+    <None Include="wwwroot\ui\vendors~layouts__BasicLayout~p__Apps~p__Clients~p__Configs~p__Logs~p__Nodes~p__User~p__User__initPas~1919c8c2.86722874.async.js" />
+    <None Include="wwwroot\ui\vendors~layouts__BlankLayout.d5e3df3c.async.js" />
+    <None Include="wwwroot\ui\vendors~p__Apps~p__Clients~p__Configs~p__Logs~p__Nodes~p__User.bd2b2e64.async.js" />
+    <None Include="wwwroot\ui\vendors~p__Home.91752d29.async.js" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>
