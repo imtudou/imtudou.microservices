@@ -1,0 +1,110 @@
+{
+  "version": 3,
+  "targets": {
+    "net5.0": {
+      "Imtudou.Core.CommonEnum/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Imtudou.Core.CommonEnum.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Imtudou.Core.CommonEnum.dll": {}
+        }
+      },
+      "Imtudou.Core.Extension/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Imtudou.Core.Extension.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Imtudou.Core.Extension.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Imtudou.Core.CommonEnum/1.0.0": {
+      "type": "project",
+      "path": "../Imtudou.Core.CommonEnum/Imtudou.Core.CommonEnum.csproj",
+      "msbuildProject": "../Imtudou.Core.CommonEnum/Imtudou.Core.CommonEnum.csproj"
+    },
+    "Imtudou.Core.Extension/1.0.0": {
+      "type": "project",
+      "path": "../Imtudou.Core.Extension/Imtudou.Core.Extension.csproj",
+      "msbuildProject": "../Imtudou.Core.Extension/Imtudou.Core.Extension.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net5.0": [
+      "Imtudou.Core.CommonEnum >= 1.0.0",
+      "Imtudou.Core.Extension >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\DeskTop\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "D:\\projects\\sample\\imtudou.microservices\\net5\\src\\Core\\Imtudou.Core.CommonModel\\Imtudou.Core.CommonModel.csproj",
+      "projectName": "Imtudou.Core.CommonModel",
+      "projectPath": "D:\\projects\\sample\\imtudou.microservices\\net5\\src\\Core\\Imtudou.Core.CommonModel\\Imtudou.Core.CommonModel.csproj",
+      "packagesPath": "C:\\Users\\DeskTop\\.nuget\\packages\\",
+      "outputPath": "D:\\projects\\sample\\imtudou.microservices\\net5\\src\\Core\\Imtudou.Core.CommonModel\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\DeskTop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net5.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://192.192.192.231:8000/v3/index.json": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "projectReferences": {
+            "D:\\projects\\sample\\imtudou.microservices\\net5\\src\\Core\\Imtudou.Core.CommonEnum\\Imtudou.Core.CommonEnum.csproj": {
+              "projectPath": "D:\\projects\\sample\\imtudou.microservices\\net5\\src\\Core\\Imtudou.Core.CommonEnum\\Imtudou.Core.CommonEnum.csproj"
+            },
+            "D:\\projects\\sample\\imtudou.microservices\\net5\\src\\Core\\Imtudou.Core.Extension\\Imtudou.Core.Extension.csproj": {
+              "projectPath": "D:\\projects\\sample\\imtudou.microservices\\net5\\src\\Core\\Imtudou.Core.Extension\\Imtudou.Core.Extension.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net5.0": {
+        "targetAlias": "net5.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
