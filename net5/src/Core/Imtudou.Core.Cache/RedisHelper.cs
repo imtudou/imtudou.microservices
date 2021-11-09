@@ -2,7 +2,7 @@
 
 namespace Imtudou.Core.Cache
 {
-    public class Class1
+    public class RedisHelper
     {
     }
 }
