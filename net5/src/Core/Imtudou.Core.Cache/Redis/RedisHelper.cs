@@ -1,5 +1,4 @@
-﻿using Imtudou.Core.Cache.ColinChang.RedisHelper;
-
+﻿
 using Microsoft.Extensions.Options;
 
 using Newtonsoft.Json;
@@ -14,13 +13,13 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace Imtudou.Core.Cache
+namespace Imtudou.Core.Cache.Redis
 {
 
     public class RedisHelper : IRedisHelper
     {
-        private readonly ConnectionMultiplexer _conn;
-        private readonly IDatabase _db;
+        private readonly ConnectionMultiplexer conn;
+        private readonly IDatabase db;
 
         public RedisHelper(IOptionsMonitor<RedisHelperOptions> options) : this(options.CurrentValue)
         {
@@ -29,83 +28,83 @@ namespace Imtudou.Core.Cache
         public RedisHelper(RedisHelperOptions options)
         {
             var connectionString = options.ConnectionString;
-            _conn = ConnectionMultiplexer.Connect(connectionString);
+            conn = ConnectionMultiplexer.Connect(connectionString);
 
             var dbNumber = options.DbNumber;
-            _db = _conn.GetDatabase(dbNumber);
+            db = conn.GetDatabase(dbNumber);
         }
 
 
         #region String
 
         public async Task<bool> StringSetAsync<T>(string key, T value) =>
-            await _db.StringSetAsync(key, value.ToRedisValue());
+            await db.StringSetAsync(key, value.ToRedisValue());
 
         public async Task<T> StringGetAsync<T>(string key) where T : class =>
-            (await _db.StringGetAsync(key)).ToObject<T>();
+            (await db.StringGetAsync(key)).ToObject<T>();
 
         public async Task<double> StringIncrementAsync(string key, int value = 1) =>
-            await _db.StringIncrementAsync(key, value);
+            await db.StringIncrementAsync(key, value);
 
         public async Task<double> StringDecrementAsync(string key, int value = 1) =>
-            await _db.StringDecrementAsync(key, value);
+            await db.StringDecrementAsync(key, value);
 
         #endregion
 
         #region List
 
         public async Task<long> EnqueueAsync<T>(string key, T value) =>
-            await _db.ListRightPushAsync(key, value.ToRedisValue());
+            await db.ListRightPushAsync(key, value.ToRedisValue());
 
         public async Task<T> DequeueAsync<T>(string key) where T : class =>
-            (await _db.ListLeftPopAsync(key)).ToObject<T>();
+            (await db.ListLeftPopAsync(key)).ToObject<T>();
 
         public async Task<IEnumerable<T>> PeekRangeAsync<T>(string key, long start = 0, long stop = -1)
             where T : class =>
-            (await _db.ListRangeAsync(key, start, stop)).ToObjects<T>();
+            (await db.ListRangeAsync(key, start, stop)).ToObjects<T>();
 
         #endregion
 
         #region Set
 
         public async Task<bool> SetAddAsync<T>(string key, T value) =>
-            await _db.SetAddAsync(key, value.ToRedisValue());
+            await db.SetAddAsync(key, value.ToRedisValue());
 
         public async Task<long> SetRemoveAsync<T>(string key, IEnumerable<T> values) =>
-            await _db.SetRemoveAsync(key, values.ToRedisValues());
+            await db.SetRemoveAsync(key, values.ToRedisValues());
 
         public async Task<IEnumerable<T>> SetMembersAsync<T>(string key) where T : class =>
-            (await _db.SetMembersAsync(key)).ToObjects<T>();
+            (await db.SetMembersAsync(key)).ToObjects<T>();
 
         public async Task<bool> SetContainsAsync<T>(string key, T value) =>
-            await _db.SetContainsAsync(key, value.ToRedisValue());
+            await db.SetContainsAsync(key, value.ToRedisValue());
 
         #endregion
 
         #region Sortedset
 
         public async Task<bool> SortedSetAddAsync(string key, string member, double score) =>
-            await _db.SortedSetAddAsync(key, member, score);
+            await db.SortedSetAddAsync(key, member, score);
 
         public async Task<long> SortedSetRemoveAsync(string key, IEnumerable<string> members) =>
-            await _db.SortedSetRemoveAsync(key, members.ToRedisValues());
+            await db.SortedSetRemoveAsync(key, members.ToRedisValues());
 
         public async Task<double> SortedSetIncrementAsync(string key, string member, double value) =>
-            await _db.SortedSetIncrementAsync(key, member, value);
+            await db.SortedSetIncrementAsync(key, member, value);
 
         public async Task<double> SortedSetDecrementAsync(string key, string member, double value) =>
-            await _db.SortedSetDecrementAsync(key, member, value);
+            await db.SortedSetDecrementAsync(key, member, value);
 
         public async Task<ConcurrentDictionary<string, double>> SortedSetRangeByRankWithScoresAsync(string key,
             long start = 0,
             long stop = -1,
             Order order = Order.Ascending) =>
-            (await _db.SortedSetRangeByRankWithScoresAsync(key, start, stop, order)).ToConcurrentDictionary();
+            (await db.SortedSetRangeByRankWithScoresAsync(key, start, stop, order)).ToConcurrentDictionary();
 
         public async Task<ConcurrentDictionary<string, double>> SortedSetRangeByScoreWithScoresAsync(string key,
             double start = double.NegativeInfinity, double stop = double.PositiveInfinity,
             Exclude exclude = Exclude.None, Order order = Order.Ascending, long skip = 0, long take = -1) =>
-            (await _db.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip, take))
+            (await db.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip, take))
             .ToConcurrentDictionary();
 
         #endregion
@@ -113,17 +112,17 @@ namespace Imtudou.Core.Cache
         #region Hash
 
         public async Task<ConcurrentDictionary<string, string>> HashGetAsync(string key) =>
-            (await _db.HashGetAllAsync(key)).ToConcurrentDictionary();
+            (await db.HashGetAllAsync(key)).ToConcurrentDictionary();
 
         public async Task<ConcurrentDictionary<string, string>> HashGetFieldsAsync(string key,
             IEnumerable<string> fields) =>
-            (await _db.HashGetAsync(key, fields.ToRedisValues())).ToConcurrentDictionary(fields);
+            (await db.HashGetAsync(key, fields.ToRedisValues())).ToConcurrentDictionary(fields);
 
         public async Task HashSetAsync(string key, ConcurrentDictionary<string, string> entries)
         {
             var val = entries.ToHashEntries();
             if (val != null)
-                await _db.HashSetAsync(key, val);
+                await db.HashSetAsync(key, val);
         }
 
         public async Task HashSetFieldsAsync(string key, ConcurrentDictionary<string, string> fields)
@@ -155,7 +154,7 @@ namespace Imtudou.Core.Cache
             var success = true;
             foreach (var field in fields)
             {
-                if (!await _db.HashDeleteAsync(key, field))
+                if (!await db.HashDeleteAsync(key, field))
                     success = false;
             }
 
@@ -167,37 +166,37 @@ namespace Imtudou.Core.Cache
         #region Key
 
         public IEnumerable<string> GetAllKeys() =>
-            _conn.GetEndPoints().Select(endPoint => _conn.GetServer(endPoint))
+            conn.GetEndPoints().Select(endPoint => conn.GetServer(endPoint))
                 .SelectMany(server => server.Keys().ToStrings());
 
         public IEnumerable<string> GetAllKeys(EndPoint endPoint) =>
-            _conn.GetServer(endPoint).Keys().ToStrings();
+            conn.GetServer(endPoint).Keys().ToStrings();
 
         public async Task<bool> KeyExistsAsync(string key) =>
-            await _db.KeyExistsAsync(key);
+            await db.KeyExistsAsync(key);
 
         public async Task<long> KeyDeleteAsync(IEnumerable<string> keys) =>
-            await _db.KeyDeleteAsync(keys.Select(k => (RedisKey)k).ToArray());
+            await db.KeyDeleteAsync(keys.Select(k => (RedisKey)k).ToArray());
 
 
-        public async Task<bool> KeyExpireAsync(string key, TimeSpan? expiry) => await _db.KeyExpireAsync(key, expiry);
+        public async Task<bool> KeyExpireAsync(string key, TimeSpan? expiry) => await db.KeyExpireAsync(key, expiry);
 
-        public async Task<bool> KeyExpireAsync(string key, DateTime? expiry) => await _db.KeyExpireAsync(key, expiry);
+        public async Task<bool> KeyExpireAsync(string key, DateTime? expiry) => await db.KeyExpireAsync(key, expiry);
 
         #endregion
 
         #region Advanced
 
         public async Task<long> PublishAsync(string channel, string msg) =>
-            await _conn.GetSubscriber().PublishAsync(channel, msg);
+            await conn.GetSubscriber().PublishAsync(channel, msg);
 
         public async Task SubscribeAsync(string channel, Action<string, string> handler) =>
-            await _conn.GetSubscriber().SubscribeAsync(channel, (chn, msg) => handler(chn, msg));
+            await conn.GetSubscriber().SubscribeAsync(channel, (chn, msg) => handler(chn, msg));
 
         public Task ExecuteBatchAsync(params Action[] operations) =>
             Task.Run(() =>
             {
-                var batch = _db.CreateBatch();
+                var batch = db.CreateBatch();
 
                 foreach (var operation in operations)
                     operation();
@@ -209,7 +208,7 @@ namespace Imtudou.Core.Cache
         public async Task<(bool, object)> LockExecuteAsync(string key, string value, Delegate del,
             TimeSpan expiry, params object[] args)
         {
-            if (!await _db.LockTakeAsync(key, value, expiry))
+            if (!await db.LockTakeAsync(key, value, expiry))
                 return (false, null);
 
             try
@@ -218,7 +217,7 @@ namespace Imtudou.Core.Cache
             }
             finally
             {
-                _db.LockRelease(key, value);
+                db.LockRelease(key, value);
             }
         }
 
@@ -237,7 +236,7 @@ namespace Imtudou.Core.Cache
             }
             finally
             {
-                _db.LockRelease(key, value);
+                db.LockRelease(key, value);
             }
         }
 
@@ -264,7 +263,7 @@ namespace Imtudou.Core.Cache
             }
             finally
             {
-                _db.LockRelease(key, value);
+                db.LockRelease(key, value);
             }
         }
 
@@ -281,7 +280,7 @@ namespace Imtudou.Core.Cache
             }
             finally
             {
-                _db.LockRelease(key, value);
+                db.LockRelease(key, value);
             }
         }
 
@@ -292,7 +291,7 @@ namespace Imtudou.Core.Cache
                 var timer = new System.Timers.Timer(1000);
                 timer.Elapsed += (s, e) =>
                 {
-                    if (!_db.LockTake(key, value, expiry))
+                    if (!db.LockTake(key, value, expiry))
                         return;
                     try
                     {
@@ -315,109 +314,10 @@ namespace Imtudou.Core.Cache
                 timer.Close();
                 timer.Dispose();
 
-                return _db.LockQuery(key) == value;
+                return db.LockQuery(key) == value;
             }
         }
 
         #endregion
-    }
-
-    public static class StackExchangeRedisExtension
-    {
-        public static IEnumerable<string> ToStrings(this IEnumerable<RedisKey> keys)
-        {
-            var redisKeys = keys as RedisKey[] ?? keys.ToArray();
-            return !redisKeys.Any() ? null : redisKeys.Select(k => (string)k);
-        }
-
-        public static RedisValue ToRedisValue<T>(this T value)
-        {
-            if (value == null)
-                return RedisValue.Null;
-
-            return value is ValueType || value is string
-                ? value as string
-                : JsonConvert.SerializeObject(value);
-        }
-
-
-        public static RedisValue[] ToRedisValues<T>(this IEnumerable<T> values)
-        {
-            var enumerable = values as T[] ?? values.ToArray();
-            return !enumerable.Any() ? null : enumerable.Select(v => v.ToRedisValue()).ToArray();
-        }
-
-        public static T ToObject<T>(this RedisValue value) where T : class
-        {
-            if (value == RedisValue.Null)
-                return null;
-
-            return typeof(T) == typeof(string)
-                ? value.ToString() as T
-                : JsonConvert.DeserializeObject<T>(value.ToString());
-        }
-
-        public static IEnumerable<T> ToObjects<T>(this IEnumerable<RedisValue> values) where T : class
-        {
-            var redisValues = values as RedisValue[] ?? values.ToArray();
-            return !redisValues.Any() ? null : redisValues.Select(v => v.ToObject<T>());
-        }
-
-        public static HashEntry[] ToHashEntries(this ConcurrentDictionary<string, string> entries)
-        {
-            if (entries == null || !entries.Any())
-                return null;
-
-            var es = new HashEntry[entries.Count];
-            for (var i = 0; i < entries.Count; i++)
-            {
-                var name = entries.Keys.ElementAt(i);
-                var value = entries[name];
-                es[i] = new HashEntry(name, value);
-            }
-
-            return es;
-        }
-
-        public static ConcurrentDictionary<string, string> ToConcurrentDictionary(this IEnumerable<HashEntry> entries)
-        {
-            var hashEntries = entries as HashEntry[] ?? entries.ToArray();
-            if (!hashEntries.Any())
-                return null;
-
-
-            var dict = new ConcurrentDictionary<string, string>();
-            foreach (var entry in hashEntries)
-                dict[entry.Name] = entry.Value;
-
-            return dict;
-        }
-
-        public static ConcurrentDictionary<string, string> ToConcurrentDictionary(this RedisValue[] hashValues,
-            IEnumerable<string> fields)
-        {
-            var enumerable = fields as string[] ?? fields.ToArray();
-            if (hashValues == null || !hashValues.Any() || !enumerable.Any())
-                return null;
-
-            var dict = new ConcurrentDictionary<string, string>();
-            for (var i = 0; i < enumerable.Count(); i++)
-                dict[enumerable.ElementAt(i)] = hashValues[i];
-
-            return dict;
-        }
-
-        public static ConcurrentDictionary<string, double> ToConcurrentDictionary(
-            this IEnumerable<SortedSetEntry> entries)
-        {
-            var sortedSetEntries = entries as SortedSetEntry[] ?? entries.ToArray();
-            if (!sortedSetEntries.Any())
-                return null;
-            var dict = new ConcurrentDictionary<string, double>();
-            foreach (var entry in sortedSetEntries)
-                dict[entry.Element] = entry.Score;
-
-            return dict;
-        }
     }
 }

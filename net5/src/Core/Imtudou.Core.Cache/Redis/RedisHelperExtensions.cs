@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Imtudou.Core.Cache.ColinChang.RedisHelper;
 
-namespace Imtudou.Core.Cache
+namespace Imtudou.Core.Cache.Redis
 {
     public static class RedisHelperExtensions
     {
@@ -22,8 +21,7 @@ namespace Imtudou.Core.Cache
             return services;
         }
 
-        public static IServiceCollection AddRedisHelper(this IServiceCollection services,
-            Action<RedisHelperOptions> configureOptions)
+        public static IServiceCollection AddRedisHelper(this IServiceCollection services, Action<RedisHelperOptions> configureOptions)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));

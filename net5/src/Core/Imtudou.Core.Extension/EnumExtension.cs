@@ -7,7 +7,7 @@ namespace Imtudou.Core.Extension
     /// <summary>
     /// 枚举扩展类
     /// </summary>
-    public static class EnumHelper
+    public static class EnumExtension
     {
         /// <summary>
         /// 获取枚举描述信息
@@ -33,7 +33,8 @@ namespace Imtudou.Core.Extension
         /// <summary>
         /// 根据enum的name获取description
         /// </summary>
-        /// <param name="enumName">enum名字</param>
+        /// <typeparam name="T">Enum</typeparam>
+        /// <param name="enumName"></param>
         /// <returns></returns>
         public static string GetDescriptionValue<T>(this string enumName)
         {
@@ -62,7 +63,7 @@ namespace Imtudou.Core.Extension
         /// <summary>
         /// 根据enum的value获取description
         /// </summary>
-        /// <typeparam name="T">泛型</typeparam>
+        /// <typeparam name="T">Enum</typeparam>
         /// <param name="enumValue">enum值</param>
         /// <returns>结果</returns>
         public static string GetDescriptionValue<T>(this int enumValue)
@@ -93,7 +94,7 @@ namespace Imtudou.Core.Extension
         /// <summary>
         /// 根据enum的value获取枚举对象
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">Enum</typeparam>
         /// <param name="enumValue">enum值</param>
         /// <returns></returns>
         public static T ValueToEnum<T>(this int enumValue)
@@ -118,7 +119,7 @@ namespace Imtudou.Core.Extension
         /// <summary>
         /// 根据Name获取枚举对象
         /// </summary>
-        /// <typeparam name="T">泛型</typeparam>
+        /// <typeparam name="T">Enum</typeparam>
         /// <param name="name">Name</param>
         /// <returns>枚举对象</returns>
         public static T NameToEnum<T>(this string name)
@@ -147,6 +148,7 @@ namespace Imtudou.Core.Extension
         /// <summary>
         /// 根据Description获取枚举对象
         /// </summary>
+        /// <typeparam name="T">Enum</typeparam>
         /// <param name="desc">Description</param>
         /// <returns>枚举对象</returns>
         public static T DescriptionToEnum<T>(this string desc)

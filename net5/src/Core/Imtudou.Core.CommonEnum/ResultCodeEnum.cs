@@ -119,7 +119,7 @@ namespace Imtudou.Core.CommonEnum
         /// <summary>
         /// 数量超过上限
         /// </summary>
-        [Description("QuantityLimit")]
+        [Description("数量超过上限")]
         QuantityLimit = 500016,
 
         /// <summary>

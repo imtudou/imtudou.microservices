@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Imtudou.Core.Scheduler", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Imtudou.Core.Extension", "src\Core\Imtudou.Core.Extension\Imtudou.Core.Extension.csproj", "{FB03E7C2-A345-4FBA-9869-8A03A698E0C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imtudou.Core.Cache.Test", "tests\Imtudou.Core.Cache.Test\Imtudou.Core.Cache.Test.csproj", "{1F1812B5-7C6B-4B95-B989-13F0207C5404}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imtudou.Core.Cache.Test", "tests\Imtudou.Core.Cache.Test\Imtudou.Core.Cache.Test.csproj", "{15F929B0-1E8F-4E34-8527-75520C623590}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,10 +91,10 @@ Global
 		{FB03E7C2-A345-4FBA-9869-8A03A698E0C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB03E7C2-A345-4FBA-9869-8A03A698E0C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB03E7C2-A345-4FBA-9869-8A03A698E0C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F1812B5-7C6B-4B95-B989-13F0207C5404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F1812B5-7C6B-4B95-B989-13F0207C5404}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F1812B5-7C6B-4B95-B989-13F0207C5404}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F1812B5-7C6B-4B95-B989-13F0207C5404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15F929B0-1E8F-4E34-8527-75520C623590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15F929B0-1E8F-4E34-8527-75520C623590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15F929B0-1E8F-4E34-8527-75520C623590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15F929B0-1E8F-4E34-8527-75520C623590}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,7 +118,7 @@ Global
 		{0D7748A7-23DC-4FAB-88BF-24A257974DA0} = {C4BBD7A7-2ED5-4820-A781-F3D7FC66C146}
 		{D63F7F8C-35A3-41D7-824B-87ADD316C14B} = {C4BBD7A7-2ED5-4820-A781-F3D7FC66C146}
 		{FB03E7C2-A345-4FBA-9869-8A03A698E0C6} = {C4BBD7A7-2ED5-4820-A781-F3D7FC66C146}
-		{1F1812B5-7C6B-4B95-B989-13F0207C5404} = {5F799D15-79AE-4E89-8890-ABDC0845DD5D}
+		{15F929B0-1E8F-4E34-8527-75520C623590} = {5F799D15-79AE-4E89-8890-ABDC0845DD5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {09199F24-D4C3-4EC2-8DA4-B77FD6BF7474}
