@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Imtudou.Core.CommonEnum\Imtudou.Core.CommonEnum.csproj" />
-    <ProjectReference Include="..\Imtudou.Core.Extension\Imtudou.Core.Extension.csproj" />
+    <ProjectReference Include="..\Imtudou.Core.Extensions\Imtudou.Core.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

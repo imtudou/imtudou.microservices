@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Imtudou.Core.Cache.Redis
+namespace Imtudou.Core.Cache.Redis.Abstract
 {
 
     public interface IRedisHelper

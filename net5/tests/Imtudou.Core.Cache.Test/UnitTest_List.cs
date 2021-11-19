@@ -1,4 +1,5 @@
 using Imtudou.Core.Cache.Redis;
+using Imtudou.Core.Cache.Redis.Abstract;
 
 using System;
 using System.Threading.Tasks;

@@ -1,12 +1,14 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Imtudou.Core.Cache.Redis;
+using Imtudou.Core.Cache.Redis.Abstract;
 
-namespace Imtudou.Core.Cache.Redis
+namespace Imtudou.Core.Extensions
 {
-    public static class RedisHelperExtensions
+    public static class RedisExtension
     {
-        public static IServiceCollection AddRedisHelper(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
@@ -21,7 +23,7 @@ namespace Imtudou.Core.Cache.Redis
             return services;
         }
 
-        public static IServiceCollection AddRedisHelper(this IServiceCollection services, Action<RedisHelperOptions> configureOptions)
+        public static IServiceCollection AddRedis(this IServiceCollection services, Action<RedisHelperOptions> configureOptions)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));

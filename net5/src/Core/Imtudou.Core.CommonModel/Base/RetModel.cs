@@ -1,11 +1,5 @@
 ﻿using Imtudou.Core.CommonEnum;
-using Imtudou.Core.Extension;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Imtudou.Core.Extensions;
 
 namespace Imtudou.Core.CommonModel.Base
 {
@@ -21,7 +15,7 @@ namespace Imtudou.Core.CommonModel.Base
         {
             this.Code = ResultCodeEnum.Success;
             this.Msg = ResultCodeEnum.Success.GetDescriptionValue();
-            this.Data = typeof(T).IsClass ? new T() : default(T);
+            this.Data = typeof(T).IsClass ? new T() : default;
         }
 
         /// <summary>
@@ -31,7 +25,7 @@ namespace Imtudou.Core.CommonModel.Base
         {
             this.Code = ResultCodeEnum.Success;
             this.Msg = ResultCodeEnum.Success.GetDescriptionValue();
-            this.Data = default(T);
+            this.Data = default;
         }
 
         /// <summary>
@@ -41,7 +35,7 @@ namespace Imtudou.Core.CommonModel.Base
         /// <param name="msg"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public RetModel<T> SetModel(ResultCodeEnum code, T data = default(T))
+        public RetModel<T> SetModel(ResultCodeEnum code, T data = default)
         {
             this.Code = Code;
             this.Msg = code.GetDescriptionValue();
@@ -56,10 +50,10 @@ namespace Imtudou.Core.CommonModel.Base
         /// <param name="msg"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public RetModel<T> SetModel(ResultCodeEnum code, string msg,T data = default(T))
+        public RetModel<T> SetModel(ResultCodeEnum code, string msg,T data = default)
         {
-            this.Code = Code;
-            this.Msg = Msg;
+            this.Code = code;
+            this.Msg = msg;
             this.Data = data;
             return this;
         }

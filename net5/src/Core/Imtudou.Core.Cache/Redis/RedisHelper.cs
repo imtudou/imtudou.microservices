@@ -1,8 +1,6 @@
 ﻿
 using Microsoft.Extensions.Options;
 
-using Newtonsoft.Json;
-
 using StackExchange.Redis;
 
 using System;
@@ -12,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
+using Imtudou.Core.Cache.Redis.Abstract;
 
 namespace Imtudou.Core.Cache.Redis
 {

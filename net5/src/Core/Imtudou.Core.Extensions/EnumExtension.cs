@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Imtudou.Core.Extension
+namespace Imtudou.Core.Extensions
 {
     /// <summary>
     /// 枚举扩展类
