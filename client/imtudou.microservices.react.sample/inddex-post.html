@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<input type="button" value="发送put_ajax请求" id='btnAjax'>
+<script type="text/javascript">
+      document.querySelector('#btnAjax').onclick = function () {
+    debugger
+
+    // 异步对象
+    var xhr = new XMLHttpRequest();
+
+    // 设置属性
+    xhr.open('post', 'http://localhost:2813/api/Schedule/ExportSchedulePageList');
+
+    // 如果想要使用post提交数据,必须添加此行
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    // 将数据通过send方法传递
+    var input = {
+        "Header": {
+            "Token": "7F6C593F0B418990C282E373CD72A0E5",
+            "EJWT": "eyJUb2tlbiI6IkM5NUY4MkVCRDhENzRERUJEMjBCMTM0MkU0RTM1OTk1IiwiS2V5VmVyc2lvbiI6MCwiVGltZVN0YW1wIjoxNjQxNDQ4MzgwLCJWYWxpZFRpbWUiOiIwNDowMDowMCJ9.eyJVc2VySUQiOiIwMjRCRDc2QTBDIiwiQ3VzdG9tZXJJRCI6bnVsbCwiQnVzaW5lc3NJRCI6bnVsbCwiU2VxdWVuY2UiOm51bGwsIlNlcXVlbmNlU3RlcCI6bnVsbCwiTWl4Q29kZSI6IkJFOUY1MzA0QTFDNEUwMTg1Mzg0MzA1NDY5NUQ2NDM4Q0RDMzJENUU0MzhGNjZGQzQ5MkQ3Nzk2RUIyMzFEQjMifQ==.EC2EFDB276758BC95A0DABC4FCFE14FEECF76B1CD728192AB7822975BD312B37025C51A84CB17A360680A37E0CA1C0DA",
+            "StatusCode": 0,
+            "Message": null,
+            "TimeStamp": 1641448529103
+        },
+        "Body": {
+            "BeginDate": "2022/01/01",
+            "EndDate": "2022/01/05",
+            "DepLevels": [
+                "66C445F8D2"
+            ],
+            "FileName": "排班表"
+        }
+    };
+    xhr.send(JSON.stringify(input));
+
+    // 发送并接受返回值
+    xhr.onreadystatechange = function () {
+        // 这步为判断服务器是否正确响应
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            alert(xhr.responseText);
+        }
+    };
+}
+</script>
+</body>
+</html>

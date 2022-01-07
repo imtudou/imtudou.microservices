@@ -1,5 +1,5 @@
 ﻿using Imtudou.Core.CommonEnum;
-using Imtudou.Core.Extensions;
+using Imtudou.Core.CommonEnum.Extensions;
 
 namespace Imtudou.Core.CommonModel.Base
 {

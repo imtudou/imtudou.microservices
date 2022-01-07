@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Imtudou.Core.Extensions
+namespace Imtudou.Core.CommonEnum.Extensions
 {
     /// <summary>
     /// 枚举扩展类

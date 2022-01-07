@@ -33,9 +33,9 @@ namespace Imtudou.Core.CommonEnum
         VersionError = 500001,
 
         /// <summary>
-        /// 无任何信息反馈
+        /// 无信息
         /// </summary>
-        [Description("无任何信息反馈")]
+        [Description("无信息")]
         NoInfo = 500002,
 
         /// <summary>
