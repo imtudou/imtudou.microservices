@@ -1,4 +1,4 @@
-using Imtudou.Core.Log.Serilog;
+using Imtudou.Core.Logs.Serilog;
 
 using System;
 
