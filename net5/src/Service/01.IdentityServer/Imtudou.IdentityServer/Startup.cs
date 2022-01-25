@@ -35,7 +35,7 @@ namespace Imtudou.IdentityServer
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Imtudou.IdentityServer v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Imtudou.IdentityServer"));
             }
 
             app.UseRouting();

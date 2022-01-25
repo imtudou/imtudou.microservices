@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="FreeSql\" />
+    <Folder Include="Salsugar\" />
   </ItemGroup>
 
 </Project>
