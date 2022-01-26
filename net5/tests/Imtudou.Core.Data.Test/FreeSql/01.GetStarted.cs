@@ -6,18 +6,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.IO;
+using System.Threading;
 
 using Xunit;
 
 namespace Imtudou.Core.Data.Test
 {
-    public class UnitTest1
+    public class GetStarted
     {
         private readonly string mysql;
         private readonly string sqlserver;
         private IServiceProvider serviceProvider;
 
-        public UnitTest1()
+        public GetStarted()
         {
             mysql = GetConfiguration().GetConnectionString("mysql");
             sqlserver = GetConfiguration().GetConnectionString("sqlserver");
@@ -30,14 +31,28 @@ namespace Imtudou.Core.Data.Test
             var cc = DateTime.UtcNow.Ticks.ToString();
 
             var fsql = serviceProvider.GetService<IFreeSql>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 299; i++)
             {
-                var input = new Blog();
-                input.BlogId = (int)fsql.Insert<Blog>().AppendData(input).ExecuteIdentity();
-                Assert.True(input.BlogId > 0);
+                Thread.Sleep(1);
+                var input = new Blog
+                {
+                    BlogID = Guid.NewGuid(),
+                    Url = "www.baidu.com",
+                    Rating = new Random().Next(1, 3),
+                    CreateTime = DateTime.Now
+                };
+
+                var id = (int)fsql.Insert<Blog>()
+                    .AppendData(input)
+                    .ExecuteIdentity();
+                fsql.Insert<BlogDetail>()
+                    .AppendData(new BlogDetail(input.BlogID))
+                    .ExecuteAffrows();
+                Assert.True(id > 0);
             }
             
         }
+
 
         [Fact]
         public void AddOrEdit()
@@ -57,7 +72,7 @@ namespace Imtudou.Core.Data.Test
             var fsql = serviceProvider.GetService<IFreeSql>();
             var rows = fsql.Update<Blog>()
                 .Set(s => s.Url, "http://www.imtudou.cn")
-                .Where(s => s.BlogId == 11)
+                .Where(s => s.ID == 11)
                 .ExecuteAffrows();
 
             Assert.True(rows == 1);
@@ -68,7 +83,7 @@ namespace Imtudou.Core.Data.Test
         {
             var fsql = serviceProvider.GetService<IFreeSql>();
             var rows = fsql.Delete<Blog>()
-                .Where(s => s.BlogId == 11)
+                .Where(s => s.ID == 11)
                 .ExecuteAffrows();
             Assert.True(rows == 1);
         }
@@ -82,7 +97,7 @@ namespace Imtudou.Core.Data.Test
             var fsql = serviceProvider.GetService<IFreeSql>();
             var result = fsql.Select<Blog>()
                 .Where(s => s.Rating > 0)
-                .OrderBy(s => s.BlogId)
+                .OrderBy(s => s.ID)
                 .Skip((pageIndex -1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -98,7 +113,7 @@ namespace Imtudou.Core.Data.Test
             var fsql = serviceProvider.GetService<IFreeSql>();
             var result = fsql.Select<Blog>()
                 .Where(s => s.Rating > 0)
-                .OrderBy(s => s.BlogId)
+                .OrderBy(s => s.ID)
                 .Skip( pageIndex * pageSize)
                 .Limit(pageSize) //第50行-60行的记录
                 .ToList();
@@ -106,7 +121,7 @@ namespace Imtudou.Core.Data.Test
             Assert.NotNull(result);
         }
 
-        private static IConfiguration GetConfiguration()
+        private IConfiguration GetConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -129,32 +144,31 @@ namespace Imtudou.Core.Data.Test
 
     public class Blog
     {
-        public Blog()
-        {
-            Url = "www.baidu.com";
-            Rating = new Random().Next();
-        }
-
-
         [Column(IsIdentity = true, IsPrimary = true)]
-        public int BlogId { get; set; }
+        public int ID { get; set; }
+        public Guid BlogID { get; set; }
         public string Url { get; set; }
         public int Rating { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 
     public class BlogDetail
     {
-        public BlogDetail(int blogid)
+        public BlogDetail(Guid blogid)
         {
+            BlogDetailID = Guid.NewGuid();
             Title = "标题" + new Random().Next(1, 99);
-            BlogId = blogid;
+            BlogID = blogid;
             Content = "内容" + new Random().Next(1, 99);
+            CreateTime = DateTime.Now;
         }
 
         [Column(IsIdentity = true, IsPrimary = true)]
-        public int BlogDetailID { get; set; }
-        public int BlogId { get; set; }
+        public int ID { get; set; }
+        public Guid BlogID { get; set; }
+        public Guid BlogDetailID { get; set; }              
         public string Title { get; set; }
         public string Content { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }
