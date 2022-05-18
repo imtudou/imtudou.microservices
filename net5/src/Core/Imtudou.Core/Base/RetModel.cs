@@ -23,8 +23,8 @@ namespace Imtudou.Core.Base
         /// </summary>
         public RetModel(ResultCodeEnum code)
         {
-            this.Code = ResultCodeEnum.Success;
-            this.Msg = ResultCodeEnum.Success.GetDescriptionValue();
+            this.Code = code;
+            this.Msg = code.GetDescriptionValue();
             this.Data = default;
         }
 
@@ -59,37 +59,6 @@ namespace Imtudou.Core.Base
         }
 
         /// <summary>
-        /// 接口编码
-        /// </summary>
-        public string Action { get; set; }
-
-        /// <summary>
-        /// 请求来源
-        /// </summary>
-        public string From { get; set; }
-
-        /// <summary>
-        /// 租户信息
-        /// </summary>
-        public string TenantID { get; set; }
-
-        /// <summary>
-        /// JWT
-        /// </summary>
-        public string JWT { get; set; }
-
-        /// <summary>
-        /// 签名
-        /// </summary>
-        public string Signature { get; set; }
-
-        /// <summary>
-        /// 时间戳
-        /// </summary>
-        public string TimeStamp { get; set; }
-
-
-        /// <summary>
         /// 统一返回码
         /// </summary>
         public ResultCodeEnum Code { get; set; }
@@ -103,6 +72,11 @@ namespace Imtudou.Core.Base
         /// 统一返回Data
         /// </summary>
         public T Data { get; set; }
+
+        /// <summary>
+        /// 总条数
+        /// </summary>
+        public int Total { get; set; }
 
     }
 }

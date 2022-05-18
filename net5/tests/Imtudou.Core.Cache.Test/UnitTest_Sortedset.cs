@@ -1,5 +1,4 @@
-using Imtudou.Core.Cache.Redis;
-using Imtudou.Core.Cache.Redis.Abstract;
+using Imtudou.Core.Cache.StackExchangeRedis;
 
 using StackExchange.Redis;
 
@@ -15,12 +14,12 @@ namespace Imtudou.Core.Cache.Test
     {
 
         private readonly ITestOutputHelper testOutputHelper;
-        private readonly IRedisHelper redisHelper;
+        private readonly IRedisCache redisHelper;
 
         public UnitTest_SortedSet(ITestOutputHelper testOutput)
         {
             this.testOutputHelper = testOutput;
-            this.redisHelper = new RedisHelper(new RedisHelperOptions("127.0.0.1:6379,allowadmin=true,connectTimeout=1000,connectRetry=1,syncTimeout=10000", 0));
+            this.redisHelper = new RedisCache(new RedisOptions("127.0.0.1:6379,allowadmin=true,connectTimeout=1000,connectRetry=1,syncTimeout=10000", 0));
         }
 
 

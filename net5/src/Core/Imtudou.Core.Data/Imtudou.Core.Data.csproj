@@ -6,7 +6,14 @@
 
   <ItemGroup>
     <Folder Include="FreeSql\" />
-    <Folder Include="Salsugar\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SqlSugarCore" Version="5.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Imtudou.Core\Imtudou.Core.csproj" />
   </ItemGroup>
 
 </Project>
