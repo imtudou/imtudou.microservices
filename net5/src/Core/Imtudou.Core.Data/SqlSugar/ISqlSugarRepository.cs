@@ -13,6 +13,8 @@ namespace Imtudou.Core.Data.SqlSugar
 {
     public interface ISqlSugarRepository<T, TKey> : IRepository<T, TKey> where T : class, IKey<TKey>, new()
     {
+        SqlSugarClient DbContext { get; set; }
+
         /// <summary>
         ///  查找数量
         /// </summary>
@@ -67,5 +69,7 @@ namespace Imtudou.Core.Data.SqlSugar
         /// <param name="total">总条数</param>
         /// <returns></returns>        
         Task<List<T>> GetPageListAsync(Expression<Func<T, bool>> predicate, PageBaseModel page, RefAsync<int> total);
+
+
     }
 }

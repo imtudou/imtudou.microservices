@@ -1,5 +1,4 @@
 using FreeSql;
-using FreeSql.DataAnnotations;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,22 +30,22 @@ namespace Imtudou.Core.Data.Test
             var cc = DateTime.UtcNow.Ticks.ToString();
 
             var fsql = serviceProvider.GetService<IFreeSql>();
-            for (int i = 0; i < 299; i++)
+            for (int i = 0; i < 2000; i++)
             {
                 Thread.Sleep(1);
-                var input = new Blog
+                var input = new BlogEntity
                 {
                     BlogID = Guid.NewGuid(),
-                    Url = "www.baidu.com",
+                    Url = $"{i}.baidu.com",
                     Rating = new Random().Next(1, 3),
                     CreateTime = DateTime.Now
                 };
 
-                var id = (int)fsql.Insert<Blog>()
+                var id = (int)fsql.Insert<BlogEntity>()
                     .AppendData(input)
                     .ExecuteIdentity();
-                fsql.Insert<BlogDetail>()
-                    .AppendData(new BlogDetail(input.BlogID))
+                fsql.Insert<BlogDetailEntity>()
+                    .AppendData(new BlogDetailEntity(input.BlogID))
                     .ExecuteAffrows();
                 Assert.True(id > 0);
             }
@@ -58,8 +57,8 @@ namespace Imtudou.Core.Data.Test
         public void AddOrEdit()
         {
             var fsql = serviceProvider.GetService<IFreeSql>();
-            var input = new Blog {Url = "http://www.freesql.net/",Rating = 2073783301 };
-            var result = fsql.InsertOrUpdate<Blog>().SetSource(input).ExecuteAffrows();
+            var input = new BlogEntity {Url = "http://www.freesql.net/",Rating = 2073783301 };
+            var result = fsql.InsertOrUpdate<BlogEntity>().SetSource(input).ExecuteAffrows();
             Assert.True(result > 0);
         }
 
@@ -70,7 +69,7 @@ namespace Imtudou.Core.Data.Test
         public void Edit()
         {
             var fsql = serviceProvider.GetService<IFreeSql>();
-            var rows = fsql.Update<Blog>()
+            var rows = fsql.Update<BlogEntity>()
                 .Set(s => s.Url, "http://www.imtudou.cn")
                 .Where(s => s.ID == 11)
                 .ExecuteAffrows();
@@ -82,7 +81,7 @@ namespace Imtudou.Core.Data.Test
         public void Remove()
         {
             var fsql = serviceProvider.GetService<IFreeSql>();
-            var rows = fsql.Delete<Blog>()
+            var rows = fsql.Delete<BlogEntity>()
                 .Where(s => s.ID == 11)
                 .ExecuteAffrows();
             Assert.True(rows == 1);
@@ -95,7 +94,7 @@ namespace Imtudou.Core.Data.Test
             var pageIndex = 1;
             var pageSize = 10;
             var fsql = serviceProvider.GetService<IFreeSql>();
-            var result = fsql.Select<Blog>()
+            var result = fsql.Select<BlogEntity>()
                 .Where(s => s.Rating > 0)
                 .OrderBy(s => s.ID)
                 .Skip((pageIndex -1) * pageSize)
@@ -111,7 +110,7 @@ namespace Imtudou.Core.Data.Test
             var pageIndex = 5;
             var pageSize = 10;
             var fsql = serviceProvider.GetService<IFreeSql>();
-            var result = fsql.Select<Blog>()
+            var result = fsql.Select<BlogEntity>()
                 .Where(s => s.Rating > 0)
                 .OrderBy(s => s.ID)
                 .Skip( pageIndex * pageSize)
@@ -140,35 +139,5 @@ namespace Imtudou.Core.Data.Test
             service.AddSingleton<IFreeSql>(fsql);
             return service.BuildServiceProvider();
         }
-    }
-
-    public class Blog
-    {
-        [Column(IsIdentity = true, IsPrimary = true)]
-        public int ID { get; set; }
-        public Guid BlogID { get; set; }
-        public string Url { get; set; }
-        public int Rating { get; set; }
-        public DateTime CreateTime { get; set; }
-    }
-
-    public class BlogDetail
-    {
-        public BlogDetail(Guid blogid)
-        {
-            BlogDetailID = Guid.NewGuid();
-            Title = "±êÌâ" + new Random().Next(1, 99);
-            BlogID = blogid;
-            Content = "ÄÚÈÝ" + new Random().Next(1, 99);
-            CreateTime = DateTime.Now;
-        }
-
-        [Column(IsIdentity = true, IsPrimary = true)]
-        public int ID { get; set; }
-        public Guid BlogID { get; set; }
-        public Guid BlogDetailID { get; set; }              
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public DateTime CreateTime { get; set; }
     }
 }

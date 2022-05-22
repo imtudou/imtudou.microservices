@@ -14,34 +14,30 @@ namespace Imtudou.Core.Helpers
     /// </summary>
     public class AppSettingsHelper
     {
-        public static IConfiguration Configuration = GetConfiguration();
-
         /// <summary>
         /// GetConfiguration
         /// </summary>
         /// <returns></returns>
-        private static IConfiguration GetConfiguration()
+        public static IConfiguration GetConfiguration(string jsonName = "appsettings.json")
         {
             // Microsoft.Extensions.Configuration.Json
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory);
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs\\appsettings.json")))
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Configs\\{jsonName}")))
             {
 
                 configurationBuilder
-                    .AddJsonFile("Configs\\appsettings.json", true, true)
-                    .AddJsonFile($"Configs\\appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
+                    .AddJsonFile($"Configs\\{jsonName}", true, true)
+                    .AddJsonFile($"Configs\\{jsonName}.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
             }
 
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json")))
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{jsonName}")))
             {
                 configurationBuilder
-                   .AddJsonFile("appsettings.json", true, true)
-                   .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
+                   .AddJsonFile($"{jsonName}", true, true)
+                   .AddJsonFile($"{jsonName}.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
             }
-
-            Configuration = configurationBuilder.Build();
-            return Configuration;
+            return configurationBuilder.Build(); ;
         }
     }
 }

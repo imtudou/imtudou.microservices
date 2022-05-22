@@ -16,7 +16,18 @@ namespace Imtudou.Core.Data
     /// <typeparam name="T"></typeparam>
     public interface IRepository<T, TKey> : IDisposable where T : class, IKey<TKey>, new()
     {
-        
+        /// <summary>
+        /// 实例化
+        /// </summary>
+        IRepository<T, TKey> Instance();
+
+        /// <summary>
+        /// 实例化
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        IRepository<T, TKey> Instance(SqlOptions options);
+
         #region Query
 
         /// <summary>
@@ -29,16 +40,16 @@ namespace Imtudou.Core.Data
         /// <summary>
         /// 判断是否存在
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="param"></param>
         /// <returns></returns>
-        bool Exists(Expression<Func<T, bool>> predicate);
+        Task<bool> ExistsAsync(params TKey[] param);
 
         /// <summary>
         /// 判断是否存在
         /// </summary>
-        /// <param name="param"></param>
+        /// <param name="ids"></param>
         /// <returns></returns>
-        Task<bool> ExistsAsync(params TKey[] param);
+        bool Exists(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// 判断是否存在
@@ -66,14 +77,14 @@ namespace Imtudou.Core.Data
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        T GetById(Expression<Func<T, bool>> predicate);
+        T GetById(TKey param);
 
         /// <summary>
         /// 根据ID查找
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        Task<T> GetByIdAsync(Expression<Func<T, bool>> predicate);
+        Task<T> GetByIdAsync(TKey param);
 
         /// <summary>
         /// 根据多个ID查找
@@ -87,20 +98,6 @@ namespace Imtudou.Core.Data
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        List<T> GetByIds(IEnumerable<object> param);
-
-        /// <summary>
-        /// 根据多个ID查找
-        /// </summary>
-        /// <param name="param">逗号分隔的标识列表，范例："1,2"</param>
-        /// <returns></returns>
-        List<T> GetByIds(string param);
-
-        /// <summary>
-        /// 根据多个ID查找
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
         Task<List<T>> GetByIdsAsync(params TKey[] param);
 
         /// <summary>
@@ -108,7 +105,21 @@ namespace Imtudou.Core.Data
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
+        List<T> GetByIds(IEnumerable<object> param);
+
+        /// <summary>
+        /// 根据多个ID查找
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         Task<List<T>> GetByIdsAsync(IEnumerable<object> param);
+
+        /// <summary>
+        /// 根据多个ID查找
+        /// </summary>
+        /// <param name="param">逗号分隔的标识列表，范例："1,2"</param>
+        /// <returns></returns>
+        List<T> GetByIds(string param);
 
         /// <summary>
         /// 根据多个ID查找
@@ -224,6 +235,76 @@ namespace Imtudou.Core.Data
         #endregion
 
         #region Delete
+
+        /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        bool DeleteById(TKey param);
+
+        /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<bool> DeleteByIdAsync(TKey param);
+
+        /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        bool DeleteByIds(params TKey[] param);
+
+        /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<bool> DeleteByIdsAsync(params TKey[] param);
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        bool DeleteByIds(IEnumerable<object> param);
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<bool> DeleteByIdsAsync(IEnumerable<object> param);
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param">逗号分隔的标识列表，范例："1,2"</param>
+        /// <returns></returns>
+        bool DeleteByIds(string param);
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param">逗号分隔的标识列表，范例："1,2"</param>
+        /// <returns></returns>
+        Task<bool> DeleteByIdsAsync(string param);
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        bool Delete(Expression<Func<T, bool>> predicate);
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        Task<bool> DeleteAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// 删除数据

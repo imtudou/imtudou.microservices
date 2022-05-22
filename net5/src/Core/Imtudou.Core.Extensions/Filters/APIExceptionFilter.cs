@@ -1,7 +1,6 @@
-﻿using eHospital.Core.Utility.LogHelper;
-
-using Imtudou.Core.Base;
+﻿using Imtudou.Core.Base;
 using Imtudou.Core.CommonEnum.Extensions;
+using Imtudou.Core.Logs;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Imtudou.Core.Extensions.Filters
 {
-    public class ExceptionFilter : IExceptionFilter
+    public class APIExceptionFilter : IExceptionFilter
     {
         public void OnException(ExceptionContext context)
         {

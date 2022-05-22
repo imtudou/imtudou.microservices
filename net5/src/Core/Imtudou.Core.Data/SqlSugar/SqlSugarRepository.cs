@@ -1,8 +1,15 @@
 ﻿using Imtudou.Core.Base;
 using Imtudou.Core.CommonEnum;
 using Imtudou.Core.Helpers;
+using Imtudou.Core.Logs;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+
+using Newtonsoft.Json;
+
+using NLog;
+using NLog.Web;
 
 using SqlSugar;
 
@@ -21,23 +28,25 @@ namespace Imtudou.Core.Data.SqlSugar
     /// <typeparam name="T"></typeparam>
     public class SqlSugarRepository<T, TKey> : ISqlSugarRepository<T, TKey> where T : class, IKey<TKey>, new()
     {
-        private string connectionString;
-        private DataBaseTypeEnum dataBaseType;
-        public SqlSugarClient DbContext;
+        private string _connectionString;
+        private DataBaseTypeEnum _dataBaseType;
 
+        public SqlSugarClient DbContext { get;  set; }
         public SqlSugarRepository()
         {
-            this.connectionString = AppSettingsHelper.Configuration.GetConnectionString(nameof(DataBaseTypeEnum.SqlServer));
-            this.dataBaseType = DataBaseTypeEnum.SqlServer;
-            this.DbContext = GetSqlSugarClient();
+            if (LogManager.LogFactory.Configuration == null)
+            {
+                NLogBuilder.ConfigureNLog("Configs\\NLog.config");
+            }
+           
+        }
+        public SqlSugarRepository(SqlOptions options)
+        {
+            _connectionString = options.ConnectionString;
+            _dataBaseType = options.DataBaseType;
+            this.DbContext = this.GetSqlSugarClient();// 验证客户端
         }
 
-        public SqlSugarRepository(string connectionString, DataBaseTypeEnum dataBase)
-        {
-            this.connectionString = connectionString;
-            this.dataBaseType = dataBase;
-            this.DbContext = GetSqlSugarClient();
-        }
 
         #region Query
 
@@ -106,9 +115,9 @@ namespace Imtudou.Core.Data.SqlSugar
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public T GetById(Expression<Func<T, bool>> predicate)
+        public T GetById(TKey param)
         {
-            return this.DbContext.Queryable<T>().Single(predicate);
+            return this.DbContext.Queryable<T>().Single(s => s.Id.Equals(param));
         }
 
         /// <summary>
@@ -116,9 +125,9 @@ namespace Imtudou.Core.Data.SqlSugar
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetByIdAsync(TKey param)
         {
-            return await this.DbContext.Queryable<T>().SingleAsync(predicate);
+            return await this.DbContext.Queryable<T>().SingleAsync(s => s.Id.Equals(param));
         }
 
         /// <summary>
@@ -259,7 +268,12 @@ namespace Imtudou.Core.Data.SqlSugar
         /// <returns></returns>
         public List<T> GetPageList(Expression<Func<T, bool>> predicate, PageBaseModel page)
         {
-            return this.DbContext.Queryable<T>().Where(predicate).ToPageList(page.PageIndex, page.PageSize);
+            var cc = this.DbContext.Queryable<T>().Where(predicate)
+                .OrderByIF(string.IsNullOrEmpty(page.OrderFileds), $"{page.OrderFileds}{page.OrderByType}").ToSql();
+
+            return this.DbContext.Queryable<T>().Where(predicate)
+                .OrderByIF(string.IsNullOrEmpty(page.OrderFileds), $"{page.OrderFileds}{page.OrderByType}")
+                .ToPageList(page.PageIndex, page.PageSize);
         }
 
         /// <summary>
@@ -271,7 +285,7 @@ namespace Imtudou.Core.Data.SqlSugar
         /// <returns></returns>        
         public List<T> GetPageList(Expression<Func<T, bool>> predicate, PageBaseModel page, ref int total)
         {
-            return this.DbContext.Queryable<T>().Where(predicate).ToPageList(page.PageIndex, page.PageSize, ref total);
+            return this.DbContext.Queryable<T>().Where(predicate).OrderByIF(!string.IsNullOrEmpty(page.OrderFileds), $"{page.OrderFileds} {page.OrderByType}").ToPageList(page.PageIndex, page.PageSize, ref total);
         }
 
         /// <summary>
@@ -282,7 +296,7 @@ namespace Imtudou.Core.Data.SqlSugar
         /// <returns></returns>        
         public async Task<List<T>> GetPageListAsync(Expression<Func<T, bool>> predicate, PageBaseModel page)
         {
-            return await this.DbContext.Queryable<T>().Where(predicate).ToPageListAsync(page.PageIndex, page.PageSize);
+            return await this.DbContext.Queryable<T>().Where(predicate).OrderByIF(!string.IsNullOrEmpty(page.OrderFileds), $"{page.OrderFileds} {page.OrderByType}").ToPageListAsync(page.PageIndex, page.PageSize);
         }
 
         /// <summary>
@@ -294,7 +308,7 @@ namespace Imtudou.Core.Data.SqlSugar
         /// <returns></returns>        
         public async Task<List<T>> GetPageListAsync(Expression<Func<T, bool>> predicate, PageBaseModel page, RefAsync<int> total)
         {
-            return await this.DbContext.Queryable<T>().Where(predicate).ToPageListAsync(page.PageIndex, page.PageSize, total);
+            return await this.DbContext.Queryable<T>().Where(predicate).OrderByIF(!string.IsNullOrEmpty(page.OrderFileds), $"{page.OrderFileds} {page.OrderByType}").ToPageListAsync(page.PageIndex, page.PageSize, total);
         }
         #endregion
 
@@ -429,17 +443,127 @@ namespace Imtudou.Core.Data.SqlSugar
         #region Delete
 
         /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public bool DeleteById(TKey param)
+        {
+            return this.DbContext.Deleteable<T>().In(param).ExecuteCommandHasChange();
+        }
+
+        /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteByIdAsync(TKey param)
+        {
+            return await this.DbContext.Deleteable<T>().In(param).ExecuteCommandHasChangeAsync();
+        }
+
+        /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public bool DeleteByIds(params TKey[] param)
+        {
+            return this.DbContext.Deleteable<T>().In(param).ExecuteCommandHasChange();
+        }
+
+        /// <summary>
+        /// 根据ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteByIdsAsync(params TKey[] param)
+        {
+            return await this.DbContext.Deleteable<T>().In(param).ExecuteCommandHasChangeAsync();
+        }
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public bool DeleteByIds(IEnumerable<object> param)
+        {
+            return this.DbContext.Deleteable<T>().In(param).ExecuteCommandHasChange();
+        }
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteByIdsAsync(IEnumerable<object> param)
+        {
+            return await this.DbContext.Deleteable<T>().In(param).ExecuteCommandHasChangeAsync();
+        }
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param">逗号分隔的标识列表，范例："1,2"</param>
+        /// <returns></returns>
+        public bool DeleteByIds(string param)
+        {
+            if (string.IsNullOrWhiteSpace(param))
+            {
+                throw new ArgumentNullException("param 参数不能为空");
+            }
+            var ids = param.Split(",").ToArray();
+            return this.DbContext.Deleteable<T>().In(ids).ExecuteCommandHasChange();
+        }
+
+        /// <summary>
+        /// 根据多个ID删除
+        /// </summary>
+        /// <param name="param">逗号分隔的标识列表，范例："1,2"</param>
+        /// <returns></returns>
+        public async Task<bool> DeleteByIdsAsync(string param)
+        {
+            if (string.IsNullOrWhiteSpace(param))
+            {
+                throw new ArgumentNullException("param 参数不能为空");
+            }
+            var ids = param.Split(",").ToArray();
+            return await this.DbContext.Deleteable<T>().In(ids).ExecuteCommandHasChangeAsync();
+        }
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public bool Delete(Expression<Func<T, bool>> predicate)
+        {
+            return this.DbContext.Deleteable<T>().Where(predicate).ExecuteCommandHasChange();
+        }
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await this.DbContext.Deleteable<T>().Where(predicate).ExecuteCommandHasChangeAsync();
+        }
+
+        /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="entity">实体模型</param>
         /// <returns>返回影响行数</returns>
         public bool Delete(T entity)
         {
-           return this.DbContext.Deleteable(entity).ExecuteCommandHasChange();
+            return this.DbContext.Deleteable(entity).ExecuteCommandHasChange();
         }
 
         /// <summary>
-        /// 异步删除数据
+        /// 删除数据
         /// </summary>
         /// <param name="entity">实体模型</param>
         /// <returns>返回影响行数</returns>
@@ -449,7 +573,7 @@ namespace Imtudou.Core.Data.SqlSugar
         }
 
         /// <summary>
-        /// 删除集合数据
+        /// 删除数据
         /// </summary>
         /// <param name="entity">实体模型集合</param>
         /// <returns>返回影响行数</returns>
@@ -460,7 +584,7 @@ namespace Imtudou.Core.Data.SqlSugar
         }
 
         /// <summary>
-        /// 异步删除集合数据
+        /// 删除数据
         /// </summary>
         /// <param name="entity">实体模型集合</param>
         /// <returns>返回影响行数</returns>
@@ -471,22 +595,52 @@ namespace Imtudou.Core.Data.SqlSugar
         }
         #endregion
 
-        public void Dispose()
+        #region Instance
+
+        /// <summary>
+        /// 实例化
+        /// </summary>
+        public IRepository<T, TKey> Instance()
         {
-            this.DbContext.Dispose();
+            this._connectionString = AppSettingsHelper.GetConfiguration().GetConnectionString(nameof(DataBaseTypeEnum.SqlServer));
+            this._dataBaseType = DataBaseTypeEnum.SqlServer;
+            this.DbContext = this.GetSqlSugarClient();// 验证客户端
+            return this;
         }
 
-        #region Private Method
+        /// <summary>
+        /// 实例化
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IRepository<T, TKey> Instance(SqlOptions options)
+        {
+            this._connectionString = options.ConnectionString;
+            this._dataBaseType = options.DataBaseType;
+            this.DbContext = this.GetSqlSugarClient();// 验证客户端
+            return this;
+        }
+        #endregion
+
+        public void Dispose()
+        {
+        }
+
+        #region Private Method    
         /// <summary>
         /// 获取 SqlSugarClient
         /// </summary>
         /// <returns></returns>
         private SqlSugarClient GetSqlSugarClient()
         {
+            if (string.IsNullOrEmpty(this._connectionString))
+            {
+                throw new SqlSugarException("接字符串不能为空");
+            }
             var db = new SqlSugarClient(new ConnectionConfig()
             {
-                ConnectionString = this.connectionString,
-                DbType = GetDbType(this.dataBaseType),
+                ConnectionString = this._connectionString,
+                DbType = GetDbType(this._dataBaseType),
                 IsAutoCloseConnection = true
             });
 
@@ -496,6 +650,63 @@ namespace Imtudou.Core.Data.SqlSugar
                 throw new SqlSugarException("SqlSugarClient 连接失败，请检查连接字符串或者数据库类型是否正确");
             }
 
+            //如果不存在创建数据库
+            db.DbMaintenance.CreateDatabase(); //个别数据库不支持
+
+            //SQL执行完
+            db.Aop.OnLogExecuted = (sql, pars) =>
+            {
+                //执行完了可以输出SQL执行时间 (OnLogExecutedDelegate) 
+                //Console.Write("time:" + db.Ado.SqlExecutionTime.ToString());
+
+                //执行时间超过5秒
+                //if (db.Ado.SqlExecutionTime.TotalSeconds > 1)
+                //{
+                    NLogHelper.Warn("【-----------Begin-------------】");
+                    NLogHelper.Warn($"【Sql】:{sql}");
+                    NLogHelper.Warn($"【Parametres】:{pars}");
+                    //代码CS文件名
+                    var fileName = db.Ado.SqlStackTrace.FirstFileName;
+                    NLogHelper.Warn($"代码CS文件名:{fileName}");
+                    //代码行数
+                    var fileLine = db.Ado.SqlStackTrace.FirstLine;
+                    NLogHelper.Warn($"代码行数:{fileLine}");
+                    //方法名
+                    var FirstMethodName = db.Ado.SqlStackTrace.FirstMethodName;
+                    NLogHelper.Warn($"方法名:{FirstMethodName}");
+                    //db.Ado.SqlStackTrace.MyStackTraceList[1].xxx 获取上层方法的信息
+                    NLogHelper.Warn(JsonConvert.SerializeObject(db.Ado.SqlStackTrace));
+                    NLogHelper.Warn("【-----------End-------------】");
+                //}
+            };
+            db.Aop.OnLogExecuting = (sql, pars) => //SQL执行前
+            {
+
+            };
+            db.Aop.OnError = (exp) =>//SQL报错
+            {
+                NLogHelper.Error("【-----------Begin-------------】");
+                //exp.sql 这样可以拿到错误SQL
+                NLogHelper.Error($"Sql:{exp.Sql}");
+                NLogHelper.Error($"Parametres:{exp.Parametres}");
+
+                //代码CS文件名
+                var fileName = db.Ado.SqlStackTrace.FirstFileName;
+                NLogHelper.Error($"代码CS文件名:{fileName}");
+                //代码行数
+                var fileLine = db.Ado.SqlStackTrace.FirstLine;
+                NLogHelper.Error($"代码行数:{fileLine}");
+                //方法名
+                var FirstMethodName = db.Ado.SqlStackTrace.FirstMethodName;
+                NLogHelper.Error($"方法名:{FirstMethodName}");
+                NLogHelper.Error("【-----------End-------------】");
+            };
+            //db.Aop.OnExecutingChangeSql = (sql, pars) => //可以修改SQL和参数的值
+            //{
+            //    //sql=newsql
+            //    //foreach(var p in pars) //修改
+            //    //return new KeyValuePair<string, SugarParameter[]>(sql, pars);
+            //};
             return db;
         }
 
@@ -523,6 +734,26 @@ namespace Imtudou.Core.Data.SqlSugar
             }
             return default;
         }
+
+        /// <summary>
+        /// 排序字段类型转换
+        /// </summary>
+        /// <param name="orderByType"></param>
+        /// <returns></returns>
+        private OrderByType GetOrderByType(OrderByTypeEnum orderByType)
+        {
+            switch (orderByType)
+            {
+                case OrderByTypeEnum.Asc:
+                    break;
+                case OrderByTypeEnum.Desc:
+                    break;
+                default:
+                    break;
+            }
+            return default;
+        }
         #endregion
     }
 }
+

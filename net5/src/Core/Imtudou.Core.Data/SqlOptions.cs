@@ -14,17 +14,17 @@ namespace Imtudou.Core.Data
         [Required(ErrorMessage = "sql connection string is required")]
         public string ConnectionString { get; set; }
 
-        [Required(ErrorMessage = "BaseTypeEnum is required")]
-        public DataBaseTypeEnum BaseTypeEnum { get; set; }
+        [Required(ErrorMessage = "DataBaseTypeEnum is required")]
+        public DataBaseTypeEnum DataBaseType { get; set; }
 
         public SqlOptions()
         {
         }
 
-        public SqlOptions(string connectionString, DataBaseTypeEnum dataBaseType)
+        public SqlOptions(string connectionString, DataBaseTypeEnum dataBase)
         {
             ConnectionString = connectionString;
-            BaseTypeEnum = dataBaseType;
+            DataBaseType = dataBase;
         }
 
     }

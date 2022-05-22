@@ -1,6 +1,6 @@
-﻿using eHospital.Core.Utility.LogHelper;
-
+﻿
 using Imtudou.Core.Base;
+using Imtudou.Core.Logs;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Imtudou.Core.Extensions.Filters
 {
-    public class ActionFilter : IActionFilter
+    public class APIActionFilter : IActionFilter
     {
         public void OnActionExecuting(ActionExecutingContext context)
         {
@@ -42,9 +42,9 @@ namespace Imtudou.Core.Extensions.Filters
             {
                 object param = context.ActionArguments.Values?.FirstOrDefault();
 
-                #if release
+#if release
                 NLogHelper.Info(param, $"入参：{context.HttpContext.Request.Host}{context.HttpContext.Request.Path}【{context.HttpContext.Request.GetHashCode()}】\n\t");
-                #endif
+#endif
             }
         }
 
@@ -53,9 +53,9 @@ namespace Imtudou.Core.Extensions.Filters
             if (context.Result != null && context.ModelState.IsValid && context.Exception == null)
             {
                 object param = (context.Result as ObjectResult)?.Value;
-                #if release
+#if release
                 NLogHelper.Info(param, $"出参：{context.HttpContext.Request.Host}{context.HttpContext.Request.Path}【{context.HttpContext.Request.GetHashCode()}】\n\t");
-                #endif
+#endif
             }
         }
     }

@@ -27,7 +27,7 @@
 <script>
 
 export default {
-  name: "login",
+  name: "Register",
   data() {
     return {
       user: {

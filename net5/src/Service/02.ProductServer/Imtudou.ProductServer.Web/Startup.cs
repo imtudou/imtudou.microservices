@@ -33,8 +33,8 @@ namespace Imtudou.ProductServer
             services.AddControllers();
             services.AddMvc(s =>
             {
-                s.Filters.Add(typeof(ActionFilter));
-                s.Filters.Add(typeof(ExceptionFilter));
+                s.Filters.Add(typeof(APIActionFilter));
+                s.Filters.Add(typeof(APIExceptionFilter));
             });
             services.AddSwaggerGen(c =>
             {

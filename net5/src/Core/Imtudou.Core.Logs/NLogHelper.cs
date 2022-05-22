@@ -3,7 +3,7 @@ using NLog;
 using System;
 using System.Threading.Tasks;
 
-namespace eHospital.Core.Utility.LogHelper
+namespace Imtudou.Core.Logs
 {
     /// <summary>
     /// NLogHelper
