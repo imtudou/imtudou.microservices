@@ -39,7 +39,7 @@ namespace AgileConfig.Server.Apisite
             return WebHost.CreateDefaultBuilder(args)
                   .UseKestrel(ks =>
                   {
-                      ks.ListenAnyIP(5000);
+                      ks.ListenAnyIP(8000);
                   })
                   .UseNLog()
                   .UseStartup<Startup>();

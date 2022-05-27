@@ -17,4 +17,8 @@
     <Folder Include="CSRedis\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Imtudou.Core\Imtudou.Core.csproj" />
+  </ItemGroup>
+
 </Project>

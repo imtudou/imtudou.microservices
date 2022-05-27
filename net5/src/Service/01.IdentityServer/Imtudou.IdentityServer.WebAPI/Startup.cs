@@ -36,6 +36,7 @@ namespace Imtudou.IdentityServer
                 ;
             #endregion
 
+            //services.Configure<AppsettingsOptions>(Configuration.GetSection("AppsettingsOptions"));
 
             services.AddControllers();
             services.AddMvc(s =>

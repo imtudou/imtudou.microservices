@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Imtudou.IdentityServer.Application.Authorization.Accounts
 {
-    class AccountService
+    public class AccountService : IAccountService
     {
     }
 }

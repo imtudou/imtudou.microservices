@@ -32,9 +32,11 @@ namespace Imtudou.Core.Data.Test.SqlSugar
         public GetStarted(ITestOutputHelper test)
         {
             this.testOutputHelper = test;
-            mysql = AppSettingsHelper.GetConfiguration().GetConnectionString("mysql");
-            sqlserver = AppSettingsHelper.GetConfiguration().GetConnectionString("sqlserver");
-            sqlite = AppSettingsHelper.GetConfiguration().GetConnectionString("sqlite");
+            string testst = AppSettingsHelper.Configuration["test"];
+            mysql = AppSettingsHelper.Configuration.GetConnectionString("mysql");
+            var mysql2 = AppSettingsHelper.Configuration["ConnectionStrings:mysql"];
+            sqlserver = AppSettingsHelper.Configuration.GetConnectionString("sqlserver");
+            sqlite = AppSettingsHelper.Configuration.GetConnectionString("sqlite");
             this.schoolRepository = this.GetServiceProvider().GetService<ISqlSugarRepository<SchoolEntity, int>>().Instance(new SqlOptions(mysql, DataBaseTypeEnum.MySql)) as ISqlSugarRepository<SchoolEntity, int>;
             this.studentRepository =  new SqlSugarRepository<StudentEntity, int>(new SqlOptions(sqlserver, DataBaseTypeEnum.SqlServer));
             this.classGradeRepository = this.GetServiceProvider().GetService<ISqlSugarRepository<ClassGradeEntity, int>>().Instance(new SqlOptions(sqlite, DataBaseTypeEnum.Sqlite)) as ISqlSugarRepository<ClassGradeEntity, int>;

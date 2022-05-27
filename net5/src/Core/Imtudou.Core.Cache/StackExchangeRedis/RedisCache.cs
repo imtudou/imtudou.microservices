@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
+using Imtudou.Core.Helpers;
 
 namespace Imtudou.Core.Cache.StackExchangeRedis
 {
@@ -18,6 +19,7 @@ namespace Imtudou.Core.Cache.StackExchangeRedis
     {
         private readonly ConnectionMultiplexer _conn;
         private readonly IDatabase _db;
+        private readonly RedisOptions _redisOptions;
 
         public RedisCache()
         {

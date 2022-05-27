@@ -19,37 +19,42 @@ namespace Imtudou.Core.Extensions.Filters
     {
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var ret = new RetModel<object>();
-            if (context.ActionArguments.FirstOrDefault().Value != null)
+            if (context.HttpContext.Request.Method.ToUpper() == "POST")
             {
-                if (context.HttpContext.Request.Method == HttpMethod.Post.Method)
+                var ret = new RetModel<object>();
+                if (context.ActionArguments.FirstOrDefault().Value != null)
                 {
-                    if (!context.ModelState.IsValid)
+                    if (context.HttpContext.Request.Method == HttpMethod.Post.Method)
                     {
-                        var errMsg = context.ModelState.Values.SelectMany(p => p.Errors).Select(p => p.ErrorMessage).Distinct().ToList();
-                        ret.SetModel(CommonEnum.ResultCodeEnum.ParamError, errMsg);
-                        context.Result = new JsonResult(ret);
+                        if (!context.ModelState.IsValid)
+                        {
+                            var errMsg = context.ModelState.Values.SelectMany(p => p.Errors).Select(p => p.ErrorMessage).Distinct().ToList();
+                            ret.SetModel(CommonEnum.ResultCodeEnum.ParamError, errMsg);
+                            context.Result = new JsonResult(ret);
+                        }
                     }
                 }
-            }
-            else
-            {
-                ret.SetModel(CommonEnum.ResultCodeEnum.ParamError);
-                context.Result = new JsonResult(ret);
-            }
+                else
+                {
+                    ret.SetModel(CommonEnum.ResultCodeEnum.ParamError);
+                    context.Result = new JsonResult(ret);
+                }
 
-            if (context.ActionArguments != null)
-            {
-                object param = context.ActionArguments.Values?.FirstOrDefault();
+                if (context.ActionArguments != null)
+                {
+                    object param = context.ActionArguments.Values?.FirstOrDefault();
 
 #if release
                 NLogHelper.Info(param, $"入参：{context.HttpContext.Request.Host}{context.HttpContext.Request.Path}【{context.HttpContext.Request.GetHashCode()}】\n\t");
 #endif
+                }
             }
+            
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
+
             if (context.Result != null && context.ModelState.IsValid && context.Exception == null)
             {
                 object param = (context.Result as ObjectResult)?.Value;

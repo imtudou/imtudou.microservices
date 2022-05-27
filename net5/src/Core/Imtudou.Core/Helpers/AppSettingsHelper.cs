@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AgileConfig.Client;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 using System;
 using System.Collections.Generic;
@@ -14,30 +18,31 @@ namespace Imtudou.Core.Helpers
     /// </summary>
     public class AppSettingsHelper
     {
-        /// <summary>
-        /// GetConfiguration
-        /// </summary>
-        /// <returns></returns>
-        public static IConfiguration GetConfiguration(string jsonName = "appsettings.json")
+        public static IConfiguration Configuration { get; }
+
+        static AppSettingsHelper()
         {
             // Microsoft.Extensions.Configuration.Json
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory);
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Configs\\{jsonName}")))
-            {
-
-                configurationBuilder
-                    .AddJsonFile($"Configs\\{jsonName}", true, true)
-                    .AddJsonFile($"Configs\\{jsonName}.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
-            }
-
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{jsonName}")))
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Configs\\appsettings.json")))
             {
                 configurationBuilder
-                   .AddJsonFile($"{jsonName}", true, true)
-                   .AddJsonFile($"{jsonName}.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
+                    .AddJsonFile($"Configs\\appsettings.json", true, true)
+                    .AddJsonFile($"Configs\\appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true)
+                    .Add(new AgileConfigSource(new ConfigClient("Configs\\appsettings.json")));
             }
-            return configurationBuilder.Build(); ;
+
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"appsettings.json")))
+            {
+                configurationBuilder
+                   .AddJsonFile($"appsettings.json", true, true)
+                   .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true)
+                   .Add(new AgileConfigSource(new ConfigClient("appsettings.json")));
+            }
+
+            Configuration = configurationBuilder.Build();
         }
+
     }
 }

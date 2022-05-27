@@ -4,6 +4,7 @@ using Imtudou.Core.Helpers;
 using Imtudou.Core.Logs;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Newtonsoft.Json;
@@ -34,11 +35,10 @@ namespace Imtudou.Core.Data.SqlSugar
         public SqlSugarClient DbContext { get;  set; }
         public SqlSugarRepository()
         {
-            if (LogManager.LogFactory.Configuration == null)
+            if (LogManager.LogFactory.Configuration is null)
             {
                 NLogBuilder.ConfigureNLog("Configs\\NLog.config");
             }
-           
         }
         public SqlSugarRepository(SqlOptions options)
         {
@@ -602,7 +602,7 @@ namespace Imtudou.Core.Data.SqlSugar
         /// </summary>
         public IRepository<T, TKey> Instance()
         {
-            this._connectionString = AppSettingsHelper.GetConfiguration().GetConnectionString(nameof(DataBaseTypeEnum.SqlServer));
+            this._connectionString = AppSettingsHelper.Configuration.GetConnectionString(nameof(DataBaseTypeEnum.SqlServer));
             this._dataBaseType = DataBaseTypeEnum.SqlServer;
             this.DbContext = this.GetSqlSugarClient();// 验证客户端
             return this;
@@ -662,21 +662,21 @@ namespace Imtudou.Core.Data.SqlSugar
                 //执行时间超过5秒
                 //if (db.Ado.SqlExecutionTime.TotalSeconds > 1)
                 //{
-                    NLogHelper.Warn("【-----------Begin-------------】");
-                    NLogHelper.Warn($"【Sql】:{sql}");
-                    NLogHelper.Warn($"【Parametres】:{pars}");
-                    //代码CS文件名
-                    var fileName = db.Ado.SqlStackTrace.FirstFileName;
-                    NLogHelper.Warn($"代码CS文件名:{fileName}");
-                    //代码行数
-                    var fileLine = db.Ado.SqlStackTrace.FirstLine;
-                    NLogHelper.Warn($"代码行数:{fileLine}");
-                    //方法名
-                    var FirstMethodName = db.Ado.SqlStackTrace.FirstMethodName;
-                    NLogHelper.Warn($"方法名:{FirstMethodName}");
-                    //db.Ado.SqlStackTrace.MyStackTraceList[1].xxx 获取上层方法的信息
-                    NLogHelper.Warn(JsonConvert.SerializeObject(db.Ado.SqlStackTrace));
-                    NLogHelper.Warn("【-----------End-------------】");
+                //NLogHelper.Warn("【-----------Begin-------------】");
+                //NLogHelper.Warn($"【Sql】:{sql}");
+                //NLogHelper.Warn($"【Parametres】:{pars}");
+                ////代码CS文件名
+                //var fileName = db.Ado.SqlStackTrace.FirstFileName;
+                //NLogHelper.Warn($"代码CS文件名:{fileName}");
+                ////代码行数
+                //var fileLine = db.Ado.SqlStackTrace.FirstLine;
+                //NLogHelper.Warn($"代码行数:{fileLine}");
+                ////方法名
+                //var FirstMethodName = db.Ado.SqlStackTrace.FirstMethodName;
+                //NLogHelper.Warn($"方法名:{FirstMethodName}");
+                ////db.Ado.SqlStackTrace.MyStackTraceList[1].xxx 获取上层方法的信息
+                //NLogHelper.Warn(JsonConvert.SerializeObject(db.Ado.SqlStackTrace));
+                //NLogHelper.Warn("【-----------End-------------】");
                 //}
             };
             db.Aop.OnLogExecuting = (sql, pars) => //SQL执行前
@@ -685,21 +685,21 @@ namespace Imtudou.Core.Data.SqlSugar
             };
             db.Aop.OnError = (exp) =>//SQL报错
             {
-                NLogHelper.Error("【-----------Begin-------------】");
-                //exp.sql 这样可以拿到错误SQL
-                NLogHelper.Error($"Sql:{exp.Sql}");
-                NLogHelper.Error($"Parametres:{exp.Parametres}");
+                //NLogHelper.Error("【-----------Begin-------------】");
+                ////exp.sql 这样可以拿到错误SQL
+                //NLogHelper.Error($"Sql:{exp.Sql}");
+                //NLogHelper.Error($"Parametres:{exp.Parametres}");
 
-                //代码CS文件名
-                var fileName = db.Ado.SqlStackTrace.FirstFileName;
-                NLogHelper.Error($"代码CS文件名:{fileName}");
-                //代码行数
-                var fileLine = db.Ado.SqlStackTrace.FirstLine;
-                NLogHelper.Error($"代码行数:{fileLine}");
-                //方法名
-                var FirstMethodName = db.Ado.SqlStackTrace.FirstMethodName;
-                NLogHelper.Error($"方法名:{FirstMethodName}");
-                NLogHelper.Error("【-----------End-------------】");
+                ////代码CS文件名
+                //var fileName = db.Ado.SqlStackTrace.FirstFileName;
+                //NLogHelper.Error($"代码CS文件名:{fileName}");
+                ////代码行数
+                //var fileLine = db.Ado.SqlStackTrace.FirstLine;
+                //NLogHelper.Error($"代码行数:{fileLine}");
+                ////方法名
+                //var FirstMethodName = db.Ado.SqlStackTrace.FirstMethodName;
+                //NLogHelper.Error($"方法名:{FirstMethodName}");
+                //NLogHelper.Error("【-----------End-------------】");
             };
             //db.Aop.OnExecutingChangeSql = (sql, pars) => //可以修改SQL和参数的值
             //{
