@@ -5,9 +5,10 @@ using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace IdentityServer.Implicit.IdentityServer
+namespace IdentityServer
 {
     public class Config 
     {
@@ -55,11 +56,12 @@ namespace IdentityServer.Implicit.IdentityServer
                     },
                                                 
                     // 登录成功回调处理地址，处理回调返回的数据
-                    RedirectUris = { "https://localhost:5002/signin-oidc" }, //(为了避免麻烦最好直接配置成https)
+                    RedirectUris = { "https://localhost:5001/signin-oidc" }, //(为了避免麻烦最好直接配置成https)
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" }, //(为了避免麻烦最好直接配置成https)
+                    PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" }, //(为了避免麻烦最好直接配置成https)
 
+                    RequireConsent = true, // 是否启用同意授权页面
                     // scopes that client has access to
                     AllowedScopes = {
                        "api",
@@ -78,19 +80,34 @@ namespace IdentityServer.Implicit.IdentityServer
                 {
                     SubjectId = "1",
                     Username = "zhangsan",
-                    Password = "password"
+                    Password = "password",
+                    Claims = new List<Claim>
+                    {
+                        new Claim("name","zhangsan"),
+                        new Claim("website","https://zhangsan.com"), 
+                    }
                 },
                 new TestUser
                 {
                     SubjectId = "2",
                     Username = "lisi",
-                    Password = "password"
+                    Password = "password",
+                    Claims = new List<Claim>
+                    {
+                        new Claim("name","lisi"),
+                        new Claim("website","https://lisi.com"),
+                    }
                 },
                 new TestUser
                 {
                     SubjectId = "3",
                     Username = "admin",
-                    Password = "12345"
+                    Password = "12345",
+                    Claims = new List<Claim>
+                    {
+                        new Claim("name","admin"),
+                        new Claim("website","https://admin.com"),
+                    }
                 }
             };
         }

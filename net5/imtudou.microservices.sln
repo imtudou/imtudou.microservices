@@ -89,6 +89,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcClient", "samples\Identi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "samples\IdentityServer.sample\3.IdentityServer.Implicit\IdentityServer\IdentityServer.csproj", "{88AF1CD6-76E6-466D-9D8B-12891CDA7EA4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.IdentityServer.AuthorizationCode", "4.IdentityServer.AuthorizationCode", "{FB97DAF2-2A76-447A-A162-A2303935870A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScriptClient", "samples\IdentityServer.sample\4.IdentityServer.AuthorizationCode\JavaScriptClient\JavaScriptClient.csproj", "{5C265903-BE8B-4C5B-BAAB-101891974B66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "samples\IdentityServer.sample\4.IdentityServer.AuthorizationCode\API\API.csproj", "{4D0AB5D1-961D-4650-8D78-255A58D49F64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer", "samples\IdentityServer.sample\4.IdentityServer.AuthorizationCode\IdentityServer\IdentityServer.csproj", "{E96213AE-7A70-410F-BECC-B22524488BCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -195,6 +203,18 @@ Global
 		{88AF1CD6-76E6-466D-9D8B-12891CDA7EA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88AF1CD6-76E6-466D-9D8B-12891CDA7EA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88AF1CD6-76E6-466D-9D8B-12891CDA7EA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C265903-BE8B-4C5B-BAAB-101891974B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C265903-BE8B-4C5B-BAAB-101891974B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C265903-BE8B-4C5B-BAAB-101891974B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C265903-BE8B-4C5B-BAAB-101891974B66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D0AB5D1-961D-4650-8D78-255A58D49F64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0AB5D1-961D-4650-8D78-255A58D49F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D0AB5D1-961D-4650-8D78-255A58D49F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D0AB5D1-961D-4650-8D78-255A58D49F64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E96213AE-7A70-410F-BECC-B22524488BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96213AE-7A70-410F-BECC-B22524488BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E96213AE-7A70-410F-BECC-B22524488BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96213AE-7A70-410F-BECC-B22524488BCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,6 +258,10 @@ Global
 		{DD40A86E-748F-48FD-9EC1-31A141CF14A7} = {7F69494A-81D9-42F3-B41B-0ADB1AC41CC8}
 		{D01EFB41-FDB3-4775-AD03-DBAA31F37BE5} = {9EDD9124-ECFC-4BEE-87B4-F6AB4BD1048F}
 		{88AF1CD6-76E6-466D-9D8B-12891CDA7EA4} = {9EDD9124-ECFC-4BEE-87B4-F6AB4BD1048F}
+		{FB97DAF2-2A76-447A-A162-A2303935870A} = {F3A7C4BD-677F-4A4C-938F-D03DD2AA9BF2}
+		{5C265903-BE8B-4C5B-BAAB-101891974B66} = {FB97DAF2-2A76-447A-A162-A2303935870A}
+		{4D0AB5D1-961D-4650-8D78-255A58D49F64} = {FB97DAF2-2A76-447A-A162-A2303935870A}
+		{E96213AE-7A70-410F-BECC-B22524488BCB} = {FB97DAF2-2A76-447A-A162-A2303935870A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {09199F24-D4C3-4EC2-8DA4-B77FD6BF7474}

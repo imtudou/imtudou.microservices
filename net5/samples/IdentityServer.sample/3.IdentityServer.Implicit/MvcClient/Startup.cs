@@ -41,6 +41,23 @@ namespace IdentityServer.Implicit.MvcClient
                 options.ClientId = "Mvc.Client";
                 options.ClientSecret = "secret";
                 options.SaveTokens = true; // 在 cookie 中保留来自IdentityServer 的令牌
+
+                options.Events = new Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectEvents
+                {
+                    OnRemoteSignOut = context =>
+                    {
+                        context.Response.Redirect("Home");
+                        context.HandleResponse();
+                        return Task.FromResult(0);
+                    },
+                    OnRemoteFailure = context =>
+                    {
+                        // 远程失败的事件，如下图，如果用户拒绝，那么会跳转到指定的页面
+                        context.Response.Redirect("Home");
+                        context.HandleResponse();
+                        return Task.FromResult(0);
+                    }
+                };
             });
         }
 

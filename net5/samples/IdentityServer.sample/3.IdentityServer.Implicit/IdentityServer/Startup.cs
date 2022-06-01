@@ -1,4 +1,8 @@
-using IdentityServer.Implicit.IdentityServer;
+
+
+using IdentityServer;
+
+using IdentityServer4;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 using System;
 using System.Collections.Generic;
@@ -37,6 +42,23 @@ namespace _3.IdentityServer.Implicit.IdentityServer
                 .AddTestUsers(Config.GetUsers())
                 ;
             #endregion
+
+            services.AddAuthentication()
+               .AddOpenIdConnect("oidc", "OpenID Connect", options =>
+               {
+                   options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                   options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+                   options.SaveTokens = true;
+
+                   options.Authority = "https://demo.identityserver.io/";
+                   options.ClientId = "implicit";
+
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       NameClaimType = "name",
+                       RoleClaimType = "role"
+                   };
+               });
             services.AddControllersWithViews();
 
         }
@@ -58,7 +80,9 @@ namespace _3.IdentityServer.Implicit.IdentityServer
          
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {
