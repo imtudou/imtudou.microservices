@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Imtudou.Core.CommonEnum\Imtudou.Core.CommonEnum.csproj" />
+    <ProjectReference Include="..\Imtudou.Core.Extensions\Imtudou.Core.Extensions.csproj" />
+  </ItemGroup>
+
+</Project>

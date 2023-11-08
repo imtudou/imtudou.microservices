@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Imtudou.Core.Cache\Imtudou.Core.Cache.csproj" />
+    <ProjectReference Include="..\..\..\Core\Imtudou.Core\Imtudou.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Iservice\**" />
+    <Compile Remove="Repository\**" />
+    <Content Remove="Iservice\**" />
+    <Content Remove="Repository\**" />
+    <EmbeddedResource Remove="Iservice\**" />
+    <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Iservice\**" />
+    <None Remove="Repository\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Core\Imtudou.Core.Data\Imtudou.Core.Data.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "GbTsM3gd6ZXC00KSVh7ZYJFnw+ziMxFF1aH9Fx5w9P2wvjScRTjBKuYBbxu8ePenZvm2gdCaWHl2XTVEOCszDA==",
+  "success": true,
+  "projectFilePath": "D:\\projects\\sample\\imtudou.microservices\\net\\samples\\IdentityServer.sample\\4.IdentityServer.AuthorizationCode\\JavaScriptClient\\JavaScriptClient.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\DeskTop\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.17\\microsoft.netcore.app.host.win-x64.5.0.17.nupkg.sha512"
+  ],
+  "logs": []
+}
